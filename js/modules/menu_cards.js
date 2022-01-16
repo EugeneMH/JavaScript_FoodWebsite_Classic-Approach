@@ -58,4 +58,4 @@ function menuCards () {
     //         });
     //     });
 }
-module.exports = menuCards;
+export default menuCards;

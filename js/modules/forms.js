@@ -1,9 +1,9 @@
  // Forms
 
+import {openModal, closeModal} from './modal';
 
-
- function forms () {
-    const forms = document.querySelectorAll('form');
+ function forms (formSelector) {
+    const forms = document.querySelectorAll(formSelector);
     const message = {
         loading: 'img/form/spinner.svg',
         success: 'Спасибо! Скоро мы с вами свяжемся',
@@ -88,4 +88,4 @@
         }, 4000);
     }
  }
- module.exports = forms;
+ export default forms;

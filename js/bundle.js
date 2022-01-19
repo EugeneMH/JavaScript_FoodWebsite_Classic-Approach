@@ -35,7 +35,7 @@ __webpack_require__.r(__webpack_exports__);
    
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
-            result.textContent = '____';
+            result.textContent = '----';
             return;
         }
         if (sex === 'female') {
@@ -136,15 +136,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal */ "./js/modules/modal.js");
+/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/services */ "./js/services/services.js");
  // Forms
 
 
 
- function forms () {
-    const forms = document.querySelectorAll('form');
+
+ function forms (formSelector) {
+    const forms = document.querySelectorAll(formSelector);
     const message = {
         loading: 'img/form/spinner.svg',
-        success: 'Спасибо! Скоро мы с вами свяжемся',
+        success: 'Спасибо!Скоро мы с вами свяжемся',
         failure: 'Что-то пошло не так...'
     };
    
@@ -152,27 +154,9 @@ __webpack_require__.r(__webpack_exports__);
         bindPostData(item);
     });
    
-    const postData = async (url, data) => {
-        let res = await fetch(url, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: data
-        });
     
-        return await res.json();
-    };
    
-    async function getResource(url) {
-        let res = await fetch(url);
     
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
-    
-        return await res.json();
-    }
    
     function bindPostData(form) {
         form.addEventListener('submit', (e) => {
@@ -190,7 +174,7 @@ __webpack_require__.r(__webpack_exports__);
    
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
    
-            postData('http://localhost:3000/requests', json)
+            (0,_services_services__WEBPACK_IMPORTED_MODULE_1__.postData)('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
@@ -207,7 +191,7 @@ __webpack_require__.r(__webpack_exports__);
         const prevModalDialog = document.querySelector('.modal__dialog');
    
         prevModalDialog.classList.add('hide');
-        (0,_modal__WEBPACK_IMPORTED_MODULE_0__.openModal)();
+        (0,_modal__WEBPACK_IMPORTED_MODULE_0__.openModal)('.modal');
    
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
@@ -222,7 +206,7 @@ __webpack_require__.r(__webpack_exports__);
             thanksModal.remove();
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
-            (0,_modal__WEBPACK_IMPORTED_MODULE_0__.closeModal)();
+            (0,_modal__WEBPACK_IMPORTED_MODULE_0__.closeModal)('.modal');
         }, 4000);
     }
  }
@@ -240,16 +224,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/services */ "./js/services/services.js");
  // Используем классы для создание карточек меню
 
-async function getResource (url) {
-    let res = await fetch(url);
-
-    if (!res.ok) {
-        throw new Error (`Could not fetch ${url}, status: ${res.status}`);
-    }
-    return await res.json();
-}
 
 function menuCards () {
     class MenuCard {
@@ -293,12 +270,12 @@ function menuCards () {
         }
     }
     
-    // getResource('http://localhost:3000/menu')
-    //     .then(data => {
-    //         data.forEach(({img, altimg, title, descr, price}) => {
-    //             new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
-    //         });
-    //     });
+    (0,_services_services__WEBPACK_IMPORTED_MODULE_0__.getResource)('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
+            });
+        });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (menuCards);
 
@@ -664,6 +641,46 @@ function timer () {
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
 
+/***/ }),
+
+/***/ "./js/services/services.js":
+/*!*********************************!*\
+  !*** ./js/services/services.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getResource": () => (/* binding */ getResource),
+/* harmony export */   "postData": () => (/* binding */ postData)
+/* harmony export */ });
+
+
+async function getResource(url) {
+    let res = await fetch(url);
+
+    if (!res.ok) {
+        throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+
+    return await res.json();
+}
+
+const postData = async (url, data) => {
+    let res = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: data
+    });
+
+    return await res.json();
+};
+
+
+
+
 /***/ })
 
 /******/ 	});
@@ -750,7 +767,7 @@ __webpack_require__.r(__webpack_exports__);
     const modalTimerId = setTimeout( () => (0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__.openModal)('.modal', modalTimerId), 30000);
     
     (0,_modules_calculator__WEBPACK_IMPORTED_MODULE_0__["default"])();
-    (0,_modules_forms__WEBPACK_IMPORTED_MODULE_1__["default"])();
+    (0,_modules_forms__WEBPACK_IMPORTED_MODULE_1__["default"])('form');
     (0,_modules_menu_cards__WEBPACK_IMPORTED_MODULE_2__["default"])();
     (0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__["default"])('[data-modal]', '.modal', modalTimerId);
     (0,_modules_slider__WEBPACK_IMPORTED_MODULE_4__["default"])();
